@@ -897,7 +897,7 @@ body {
     .footer-social {
         display: flex;
         align-items: center;
-        justify-content: end;
+        justify-content: flex-end;
         gap: 20px;
 
         @media (max-width: 767.98px) {

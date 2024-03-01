@@ -6,11 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import OtherHeader from '../layout/OtherHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, increment } from "../redux/appSlice";
-
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { getAnchorProgram } from '../utils/solanaUtils';
+import { getMint } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 export default function CreateOffer() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const wallet = useWallet()
+    const { connection } = useConnection()
 
     const [network, setNetwork] = useState<string>("Solana");
     const [customSellTokenAddress, setCustomSellTokenAddress] = useState("")
