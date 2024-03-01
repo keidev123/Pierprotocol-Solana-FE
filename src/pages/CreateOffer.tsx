@@ -10,6 +10,9 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { getAnchorProgram } from '../utils/solanaUtils';
 import { getMint } from '@solana/spl-token';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { tokenInfos } from '../utils/tokenList';
+import { createBookTx } from '../utils/transactions/createBook';
+import { initConfigTx } from '../utils/transactions/initConfig';
 
 export default function CreateOffer() {
     const navigate = useNavigate();
@@ -19,18 +22,11 @@ export default function CreateOffer() {
     const { connection } = useConnection()
 
     const [network, setNetwork] = useState<string>("Solana");
-    const [customSellTokenAddress, setCustomSellTokenAddress] = useState("")
-    const [customForTokenAddress, setCustomForTokenAddress] = useState("")
-    const [customSellToken, setCustomSellToken] = useState("")
-    const [customForToken, setCustomForToken] = useState("")
-
-    const [tokenInfos, setTokenInfos] = useState<{ symbol: string, name: string, network: string }[]>([])
-
 
     const [tabStatus, setTabStatus] = useState('network');
 
-    const [sellingToken, setSellingToken] = useState<string | undefined>("Select");
-    const [forToken, setForToken] = useState<string | undefined>("Select");
+    const [sellingToken, setSellingToken] = useState<string>("Select");
+    const [forToken, setForToken] = useState<string>("Select");
 
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networkDropdownRef = useRef<HTMLDivElement>(null);
@@ -41,8 +37,8 @@ export default function CreateOffer() {
     const [isForTokenOpen, setIsForTokenOpen] = useState(false);
     const forTokenDropdownRef = useRef<HTMLDivElement>(null);
 
-    const [sellTokenAmount, setSellTokenAmount] = useState<string | undefined>("0");
-    const [forTokenAmount, setForTokenAmount] = useState<string | undefined>("0");
+    const [sellTokenAmount, setSellTokenAmount] = useState<string>();
+    const [forTokenAmount, setForTokenAmount] = useState<string>();
 
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const sellingTokenToggleDropdown = () => setIsSellingTokenOpen(!isSellingTokenOpen);
@@ -56,16 +52,22 @@ export default function CreateOffer() {
         }
         if (sellingTokenDropdownRef.current && !sellingTokenDropdownRef.current.contains(event.target)) {
             setIsSellingTokenOpen(false);
-            setCustomSellTokenAddress("");
         }
         if (forTokenDropdownRef.current && !forTokenDropdownRef.current.contains(event.target)) {
             setIsForTokenOpen(false);
-            setCustomForTokenAddress("");
         }
     };
 
-    const sellToken = () => {
+    const sellToken = async () => {
+        const sellMint = tokenInfos.find((item) => item.symbol == sellingToken).address;
+        const forMint = tokenInfos.find((item) => item.symbol == forToken).address;
+        const txn = await createBookTx({connection, wallet, sellMint, forMint, sellAmount: sellTokenAmount, forAmount: forTokenAmount});
+        await wallet.sendTransaction(txn, connection);
+    }
 
+    const initConfig = async () => {
+        const txn = await initConfigTx({connection, wallet, feeWallet: wallet.publicKey})
+        await wallet.sendTransaction(txn, connection)
     }
 
     useEffect(() => {
@@ -81,7 +83,7 @@ export default function CreateOffer() {
                 <OtherHeader comingSoon={false} />
                 <div className='create-offer'>
                     <div className='title'>
-                        <span>CREATE OFFER</span>
+                        <span onClick={initConfig}>CREATE OFFER</span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="11.7492" cy="11.55" r="11.55" fill="url(#paint0_linear_0_1)" />
                             <path d="M12.9202 16.4024L10.174 16.4024L6.16023 6.84336L9.16394 6.84336L11.5207 13.1545L11.3755 13.0554L11.7254 13.0554L11.5735 13.1545L13.9369 6.84336L16.934 6.84336L12.9202 16.4024Z" fill="white" />
@@ -127,8 +129,6 @@ export default function CreateOffer() {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
-
-
                                 }
                                 <span>Amount & Sell</span>
                             </div>
@@ -250,24 +250,19 @@ export default function CreateOffer() {
                                 <div className='select-token'>
                                     <div className='select-token-modal' ref={sellingTokenDropdownRef}>
                                         <h5 className="select-token-title">Select Token</h5>
-                                        <div className='custom-token'>
+                                        {/* <div className='custom-token'>
                                             <input placeholder='Custom token address' onChange={(e) => { setCustomSellTokenAddress(e.target.value) }} />
-                                        </div>
+                                        </div> */}
                                         <ul className="select-token-list">
-                                            {
-                                                customSellToken ?
-                                                    <li onClick={() => { }}>
-                                                        <span>{customSellToken}</span>
-                                                    </li>
-                                                    :
-                                                    <>
-                                                        {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                            <li key={tokenInfo.symbol} onClick={() => { }}>
-                                                                <span>{tokenInfo.symbol}</span>
-                                                            </li>
-                                                        ))}
-                                                    </>
-                                            }
+                                            {tokenInfos.map((item) => (
+                                                <li key={item.symbol} onClick={() => {
+                                                    sellingTokenToggleDropdown()
+                                                    setSellingToken(item.symbol)
+                                                    setForToken(tokenInfos.find((jtem) => jtem.symbol != item.symbol).symbol)
+                                                }}>
+                                                    <span>{item.symbol}</span>
+                                                </li>
+                                            ))}
                                         </ul>
 
                                     </div>
@@ -278,31 +273,19 @@ export default function CreateOffer() {
                                 <div className='select-token'>
                                     <div className='select-token-modal' ref={forTokenDropdownRef}>
                                         <h5 className="select-token-title">Select Token</h5>
-                                        <div className='custom-token'>
+                                        {/* <div className='custom-token'>
                                             <input placeholder='Custom token address' onChange={(e) => { setCustomForTokenAddress(e.target.value) }} />
-                                        </div>
+                                        </div> */}
                                         <ul className="select-token-list">
-                                            {
-                                                customForToken ?
-                                                    <li onClick={() => {
-                                                        setIsForTokenOpen(false);
-                                                        setForToken(customForToken);
-                                                        setCustomForTokenAddress("");
-                                                        // if (sellingToken == tokenInfo.symbol) {
-                                                        //     setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
-                                                        // }
-                                                    }}>
-                                                        <span>{customForToken}</span>
-                                                    </li>
-                                                    :
-                                                    <>
-                                                        {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                            <li key={tokenInfo.symbol} onClick={() => { }}>
-                                                                <span>{tokenInfo.symbol}</span>
-                                                            </li>
-                                                        ))}
-                                                    </>
-                                            }
+                                            {tokenInfos.map((item) => (
+                                                <li key={item.symbol} onClick={() => {
+                                                    forTokenToggleDropdown()
+                                                    setForToken(item.symbol)
+                                                    setSellingToken(tokenInfos.find((jtem) => jtem.symbol != item.symbol).symbol)
+                                                }}>
+                                                    <span>{item.symbol}</span>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
