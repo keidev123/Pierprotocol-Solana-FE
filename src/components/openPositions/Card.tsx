@@ -1,8 +1,10 @@
 import { FC } from "react";
 import { BookInterface } from "../../utils/interfaces";
 import { tokenInfos } from "../../utils/tokenList";
+import { useNavigate } from "react-router-dom";
 
 const Card: FC<{book: BookInterface}> = ({book}) => {
+    const navigate = useNavigate()
     const sellTokenInfo = tokenInfos.find((item) => item.symbol == book.sellToken)
     const forTokenInfo = tokenInfos.find((item) => item.symbol == book.forToken)
     return (
@@ -31,7 +33,7 @@ const Card: FC<{book: BookInterface}> = ({book}) => {
                 </div>
             </div>
 
-            <button >Buy Token</button>
+            <button onClick={() => navigate(`/buy?id=${book.id}`)}>Buy Token</button>
         </div>
     );
 };

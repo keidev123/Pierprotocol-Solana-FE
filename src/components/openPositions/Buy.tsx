@@ -20,21 +20,18 @@ const Buy: React.FC<{ searchWord: string }> = ({ searchWord }) => {
     const getAllBook = async () => {
         const program = getAnchorProgram(connection, wallet)
         const booksa = await program.account.book.all()
+        const _books = []
         for (let book of booksa) {
-            console.log(book.account.offeredAmount.toString(), book.account.id.toString())
-            setBooks((prevs) => {
-                return [...prevs,
-                {
-                    sellToken: tokenInfos.find((item) => item.address == book.account.offeredMint.toString()).symbol,
-                    forToken: tokenInfos.find((item) => item.address == book.account.desiredMint.toString()).symbol,
-                    sellAmount: `${book.account.offeredAmount}`,
-                    forAmount: `${book.account.desiredAmount}`,
-                    creator: book.account.creator.toString(),
-                    id: `${book.account.id}`
-                },
-                ]
+            _books.push({
+                sellToken: tokenInfos.find((item) => item.address == book.account.offeredMint.toString()).symbol,
+                forToken: tokenInfos.find((item) => item.address == book.account.desiredMint.toString()).symbol,
+                sellAmount: `${book.account.offeredAmount}`,
+                forAmount: `${book.account.desiredAmount}`,
+                creator: book.account.creator.toString(),
+                id: `${book.account.id}`
             })
         }
+        setBooks(_books)
     }
 
     useEffect(() => {
