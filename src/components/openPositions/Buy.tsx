@@ -36,7 +36,13 @@ const Buy: React.FC<{ searchWord: string }> = ({ searchWord }) => {
     }
 
     useEffect(() => {
+        const bookInterval = setInterval(() => {
+            getAllBook()
+        }, 3000)
         getAllBook()
+        return () => {
+            clearInterval(bookInterval);
+        };
     }, [])
 
     return (

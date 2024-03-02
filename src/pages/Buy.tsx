@@ -38,13 +38,11 @@ const Buy: FC = () => {
 
     const navigate = useNavigate()
 
-    const connectWallet = async () => {
-    };
-
     const buy = async () => {
         if(book){
             const txn = await closeBookTx({connection, wallet, book, percent})
-            wallet.sendTransaction(txn, connection)
+            await wallet.sendTransaction(txn, connection)
+            navigate("/dashboard")
         }
     }
 

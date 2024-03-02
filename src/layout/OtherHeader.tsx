@@ -59,7 +59,7 @@ const OtherHeader: React.FC<{ comingSoon: boolean }> = ({ comingSoon }) => {
                                                 {isNetworkOpen && (
                                                     <ul>
                                                         {networks.map(network => (
-                                                            <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
+                                                            <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); if(network != "Solana") window.location.assign(`https://pierprotocol.com/dashboard?network=${network}`) }}>
                                                                 <div className='logo'>
                                                                     {networkSvgs[network]}
                                                                 </div>

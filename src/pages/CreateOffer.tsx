@@ -63,6 +63,7 @@ export default function CreateOffer() {
         const forMint = tokenInfos.find((item) => item.symbol == forToken).address;
         const txn = await createBookTx({connection, wallet, sellMint, forMint, sellAmount: sellTokenAmount, forAmount: forTokenAmount});
         await wallet.sendTransaction(txn, connection);
+        navigate("/dashboard")
     }
 
     const initConfig = async () => {
@@ -152,7 +153,7 @@ export default function CreateOffer() {
                                         {isNetworkOpen && (
                                             <ul>
                                                 {networks.map(network => (
-                                                    <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
+                                                    <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); if(network != "Solana") window.location.assign(`https://pierprotocol.com/create-offer?network=${network}`)}}>
                                                         <div className='logo'>
                                                             {networkSvgs[network]}
                                                         </div>
