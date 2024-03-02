@@ -333,7 +333,12 @@ export type Piersol = {
                     "isSigner": false
                 }
             ],
-            "args": []
+            "args": [
+                {
+                    "name": "percent",
+                    "type": "u8"
+                }
+            ]
         },
         {
             "name": "cancelBook",
@@ -549,6 +554,11 @@ export type Piersol = {
             "code": 6001,
             "name": "FeeRateOutOfRange",
             "msg": "The fee rate must be between 0 and 100."
+        },
+        {
+            "code": 6002,
+            "name": "PercentOutOfRange",
+            "msg": "The percent must be between 0 and 100."
         }
     ]
 };
@@ -888,7 +898,12 @@ export const IDL: Piersol = {
                     "isSigner": false
                 }
             ],
-            "args": []
+            "args": [
+                {
+                    "name": "percent",
+                    "type": "u8"
+                }
+            ]
         },
         {
             "name": "cancelBook",
@@ -1104,6 +1119,11 @@ export const IDL: Piersol = {
             "code": 6001,
             "name": "FeeRateOutOfRange",
             "msg": "The fee rate must be between 0 and 100."
+        },
+        {
+            "code": 6002,
+            "name": "PercentOutOfRange",
+            "msg": "The percent must be between 0 and 100."
         }
     ]
 };

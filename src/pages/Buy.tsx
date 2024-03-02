@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import OtherHeader from '../layout/OtherHeader';
 import ProgressCircle from '../components/buy/ProgressiveCircle';
@@ -10,6 +10,7 @@ import { getAnchorProgram } from "../utils/solanaUtils";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { tokenInfos } from '../utils/tokenList';
 import { BookInterface } from '../utils/interfaces';
+import { closeBookTx } from '../utils/transactions/closeBook';
 
 const Buy: FC = () => {
     const network = "Solana";
@@ -41,16 +42,20 @@ const Buy: FC = () => {
     };
 
     const buy = async () => {
+        if(book){
+            const txn = await closeBookTx({connection, wallet, book, percent})
+            wallet.sendTransaction(txn, connection)
+        }
     }
 
     useEffect(() => {
         if (book) {
-            const _forTokenInfos = tokenInfos.find((item) => item.symbol == book.forToken)
-            const _sellTokenInfos = tokenInfos.find((item) => item.symbol == book.sellToken)
+            const _forTokenInfos = tokenInfos.find((item) => item.symbol == book.desiredSymbol)
+            const _sellTokenInfos = tokenInfos.find((item) => item.symbol == book.offeredSymbol)
             setSellTokenInfo(_sellTokenInfos)
             setForTokenInfo(_forTokenInfos)
-            setForAmount(parseInt(`${book.forAmount}`.substring(0, `${book.forAmount}`.length - _forTokenInfos.decimals)))
-            setSellAmount(parseInt(`${book.sellAmount}`.substring(0, `${book.sellAmount}`.length - _sellTokenInfos.decimals)))
+            setForAmount(parseInt(`${book.desiredAmount}`.substring(0, `${book.desiredAmount}`.length - _forTokenInfos.decimals)))
+            setSellAmount(parseInt(`${book.offeredAmount}`.substring(0, `${book.offeredAmount}`.length - _sellTokenInfos.decimals)))
         }
     }, [book, setBook])
 
@@ -65,10 +70,10 @@ const Buy: FC = () => {
             }
             setBook(() => {
                 return {
-                    sellToken: tokenInfos.find((item) => item.address == booka.account.offeredMint.toString()).symbol,
-                    forToken: tokenInfos.find((item) => item.address == booka.account.desiredMint.toString()).symbol,
-                    sellAmount: `${booka.account.offeredAmount}`,
-                    forAmount: `${booka.account.desiredAmount}`,
+                    offeredSymbol: tokenInfos.find((item) => item.address == booka.account.offeredMint.toString()).symbol,
+                    desiredSymbol: tokenInfos.find((item) => item.address == booka.account.desiredMint.toString()).symbol,
+                    offeredAmount: `${booka.account.offeredAmount}`,
+                    desiredAmount: `${booka.account.desiredAmount}`,
                     creator: booka.account.creator.toString(),
                     id: `${booka.account.id}`
                 }

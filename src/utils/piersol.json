@@ -333,7 +333,12 @@
                     "isSigner": false
                 }
             ],
-            "args": []
+            "args": [
+                {
+                    "name": "percent",
+                    "type": "u8"
+                }
+            ]
         },
         {
             "name": "cancelBook",
@@ -549,9 +554,14 @@
             "code": 6001,
             "name": "FeeRateOutOfRange",
             "msg": "The fee rate must be between 0 and 100."
+        },
+        {
+            "code": 6002,
+            "name": "PercentOutOfRange",
+            "msg": "The percent must be between 0 and 100."
         }
     ],
     "metadata": {
-        "address": "AS5nZ6cSi43yrhjZuUwp8LgMB6MxrqWPydsbDzPJCkaU"
+        "address": "8iph992xXZEJ6X43henGaNKhrgahj4rmJczY52Jwb4Yw"
     }
 }

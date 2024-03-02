@@ -1,8 +1,8 @@
 export interface BookInterface {
-    sellToken: string,
-    forToken: string,
-    sellAmount: string,
-    forAmount: string,
+    offeredSymbol: string,
+    desiredSymbol: string,
+    offeredAmount: string,
+    desiredAmount: string,
     creator: string,
     id: string,
 }

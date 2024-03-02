@@ -22,11 +22,12 @@ const Buy: React.FC<{ searchWord: string }> = ({ searchWord }) => {
         const booksa = await program.account.book.all()
         const _books = []
         for (let book of booksa) {
+            if(book.account.state == 1)
             _books.push({
-                sellToken: tokenInfos.find((item) => item.address == book.account.offeredMint.toString()).symbol,
-                forToken: tokenInfos.find((item) => item.address == book.account.desiredMint.toString()).symbol,
-                sellAmount: `${book.account.offeredAmount}`,
-                forAmount: `${book.account.desiredAmount}`,
+                offeredSymbol: tokenInfos.find((item) => item.address == book.account.offeredMint.toString()).symbol,
+                desiredSymbol: tokenInfos.find((item) => item.address == book.account.desiredMint.toString()).symbol,
+                offeredAmount: `${book.account.offeredAmount}`,
+                desiredAmount: `${book.account.desiredAmount}`,
                 creator: book.account.creator.toString(),
                 id: `${book.account.id}`
             })
