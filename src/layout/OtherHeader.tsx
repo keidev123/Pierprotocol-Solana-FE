@@ -3,18 +3,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { networkSvgs } from '../utils/svg';
 import logo from "../assets/images/logo.png";
 import { networks } from '../utils/constants';
-import { useSelector, useDispatch } from 'react-redux';
-import { addItem, increment } from "../redux/appSlice";
-import { RootState } from "../redux/store";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const OtherHeader: React.FC<{ comingSoon: boolean }> = ({ comingSoon }) => {
-    const count = useSelector((state: RootState) => state.app.count);
     const [network, setNetwork] = useState<string>("Solana")
     const networkDropdownRef = useRef<HTMLDivElement>(null);
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
     const { setVisible, visible } = useWalletModal();
 
     const handleClickOutside = (event: any) => {
@@ -71,10 +66,7 @@ const OtherHeader: React.FC<{ comingSoon: boolean }> = ({ comingSoon }) => {
                                             </div>
                                         </div>
                                         <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
-                                            {isConnected ?
-                                                <span>Connected</span> :
-                                                <span>Connect Wallet</span>
-                                            }
+                                            <span>Connect Wallet</span>
                                         </a>
                                     </div>
                                 </>

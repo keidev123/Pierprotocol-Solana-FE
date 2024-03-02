@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Bitcoin from "../../assets/images/bitcoin-ic.svg";
-import { PiCaretUpDownFill } from "react-icons/pi";
 import Card from "./Card";
-import { useSelector, useDispatch } from "react-redux";
 import { tokenInfos } from "../../utils/tokenList";
 
 import { getAnchorProgram } from "../../utils/solanaUtils";
@@ -36,6 +33,7 @@ const Buy: React.FC<{ searchWord: string }> = ({ searchWord }) => {
     }
 
     useEffect(() => {
+        console.log(searchWord)
         const bookInterval = setInterval(() => {
             getAllBook()
         }, 3000)

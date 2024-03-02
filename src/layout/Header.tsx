@@ -6,8 +6,6 @@ import { HiOutlineMenu } from "react-icons/hi";
 
 const Header: React.FC = () => {
     const [offcanvasOpen, setOffcanvasOpen] = useState<boolean>(false);
-    const [isConnected, setIsConnected] = useState(false);
-    const [accounts, setAccounts] = useState([]);
 
     const toggleOffcanvas = () => {
         setOffcanvasOpen(!offcanvasOpen);
@@ -67,10 +65,7 @@ const Header: React.FC = () => {
                             <div className="nav-btn d-lg-flex align-items-center justify-content-center mt-lg-0 mt-4 ms-auto">
                                 <div className="d-flex gap-2 align-items-center justify-content-center mt-4 mt-lg-0">
                                     <a href={"#"} className="btn-lg navbar-btn" >
-                                        {isConnected ?
-                                            <span>Connected</span> :
-                                            <span>Connect Wallet</span>
-                                        }
+                                        <span>Connect Wallet</span>
                                     </a>
                                 </div>
                             </div>

@@ -1,8 +1,7 @@
 import { WalletContextState } from '@solana/wallet-adapter-react'
-import { Connection, PublicKey, SYSVAR_RENT_PUBKEY, SystemProgram, Transaction } from '@solana/web3.js'
-import { escrowPubkey, getAnchorProgram, getBookPubkey, getConfigPubkey, getEscrowPubkey, getFriendPubkey, getNewFeePubkey, getSwapPubkey } from '../solanaUtils'
-import { TOKEN_PROGRAM_ID, TokenAccountNotFoundError, TokenInvalidAccountOwnerError, createAssociatedTokenAccountInstruction, getAccount, getAssociatedTokenAddressSync } from '@solana/spl-token'
-import { BN } from 'bn.js'
+import { Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { escrowPubkey, getAnchorProgram, getBookPubkey, getFriendPubkey } from '../solanaUtils'
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token'
 import { BookInterface } from '../interfaces'
 import { tokenInfos } from '../tokenList'
 

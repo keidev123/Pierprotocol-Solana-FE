@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, FC } from "react";
+import { useRef, useCallback } from "react";
 
 const ProgressBar = ({ max, value, setValue, onChange }) => {
     // const [progress, setProgress] = useState(0);
@@ -14,7 +14,7 @@ const ProgressBar = ({ max, value, setValue, onChange }) => {
         [max]
     );
 
-    const handleMouseDown = (event) => {
+    const handleMouseDown = () => {
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
     };

@@ -4,19 +4,13 @@ import { networkSvgs } from '../utils/svg';
 import { networks } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import OtherHeader from '../layout/OtherHeader';
-import { useSelector, useDispatch } from 'react-redux';
-import { addItem, increment } from "../redux/appSlice";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { getAnchorProgram } from '../utils/solanaUtils';
-import { getMint } from '@solana/spl-token';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { tokenInfos } from '../utils/tokenList';
 import { createBookTx } from '../utils/transactions/createBook';
 import { initConfigTx } from '../utils/transactions/initConfig';
 
 export default function CreateOffer() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const wallet = useWallet()
     const { connection } = useConnection()
@@ -72,6 +66,7 @@ export default function CreateOffer() {
     }
 
     useEffect(() => {
+        setBooking(false)
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);

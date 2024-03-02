@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProgressCircle = ({ progress }) => {
     const radius = 50; // Radius of the circle
     const stroke = 8; // Width of the progress arc

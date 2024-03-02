@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import Buy from "./Buy";
 import Activity from "./Activity";

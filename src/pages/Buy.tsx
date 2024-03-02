@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react'
-import { useSelector, useDispatch, connect } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import OtherHeader from '../layout/OtherHeader';
 import ProgressCircle from '../components/buy/ProgressiveCircle';
@@ -13,14 +12,8 @@ import { BookInterface } from '../utils/interfaces';
 import { closeBookTx } from '../utils/transactions/closeBook';
 
 const Buy: FC = () => {
-    const network = "Solana";
-
     const { connection } = useConnection()
     const wallet = useWallet()
-
-    const [web3, setWeb3] = useState(null);
-    const [accounts, setAccounts] = useState([]);
-    const [isConnected, setIsConnected] = useState(false);
 
     const [id, setId] = useState<string>();
 

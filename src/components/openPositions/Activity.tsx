@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { PiCaretUpDownFill } from "react-icons/pi";
 
 const Activity:React.FC<{searchWord:string}> = ({ searchWord }) => {
-    const [filteredActivitys, setFilteredActivitys] = useState();
-
+    const [filteredActivitys, setFilteredActivitys] = useState([]);
+    useEffect(() => {
+        console.log(searchWord)
+        setFilteredActivitys([])
+    }, [])
     return (
         <>
             {filteredActivitys &&
