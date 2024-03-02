@@ -3,6 +3,7 @@ import { Piersol } from './piersol'
 import { AnchorProvider, Program } from '@project-serum/anchor'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import idl from './piersol.json'
+import { Buffer } from 'buffer'
 
 export const programId = new PublicKey(idl.metadata.address)
 let program: Program<Piersol>
